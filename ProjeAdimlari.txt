@@ -1,0 +1,47 @@
+﻿1=> Öncelikle katmanlarımızı (Project.ENTITIES, Project.MAP, Project.DAL,Project.BLL katmanlarını) class library (.Net Framework) olarak acıyoruz(Solution'imiza sag tıklayıp Add New Project diyerek)...UI katmanı hangi display'de istiyorsanız o platformda acılmalıdır...Bizim burada kullandıgımız Display Windows Form olarak secilmiştir...
+
+Sonra kesinlikle UI katmaını Set As Startup Project olarak ayarlamalısınız...
+
+
+N-Tier
+
+---Entities Katmanı---
+*Veritabanında tabloya donusecek olan sınıflarımızı ve enum'larımızı icerecek olan katmandır...
+
+
+---DAL Katmanı---
+*Veritabanınız ile haberleşecek ve veritabanınızın olusmasını saglayacak katmandır
+
+
+---Map Katmanı---
+*Veritabanı ayarlamalarınızı hazır bulundurup DAL'e gönderecek katmandır...
+
+
+
+
+---BLL Katmanı---
+*İş akışınızı belirleyecek olan katmandır
+
+---UI Katmanı---
+*Kullanıcının etkileşime geçecegi projeyi oluşturan katmandır
+
+
+--Sıra
+
+1 =>  Once Entities'e baslıyoruz...Entities'de sınıflarımızı tamamladıktan sonra Map katmanına geciyoruz...
+
+2 => Map Katmanına geciyoruz...Map katmanında  Veritabanı ayarlamaları yapacagımız icin Entity Framework'un bu katmana indirilmesi lazım... Bütün ayarlama işlemleri Entity Framework'ten gelir...Sonra ayarlama yapacak işlemlerimizi yapmamız gerekir...Aynı zamanda Map katmanımıza Entity Framework indirmeyi unutmadık...Ve Map katmanımız Entities katmanındaki class'ları kullanmak istedigi icin o projeden referans aldı...
+
+3 =>  DAL katmanına geciyoruz...Context class'ımızı tasarlıyoruz...Lakin burada bu katmana EntityFramework'u indirmeyi unutmamalısınız... Aynı zamanda DAL katmanı, MAP ve ENTITIES katmanlarını referans almalıdır...Önemli olan bir diger nokta da adresimizi belirlemek icin gecici bir süre UI katmanına gitmek gerektigidir...Cünkü artık bu katmandan sonra Veritabanı olusturma testi yapılmalıdır..Veritabanı olusturmak icin adresi belirleyebilmemiz lazım...
+
+              ---UI katmanına gecip Entity Framework'u indirin... İndirdikten sonra appconfig kısmına connectionstring'inizi yazın...Sonraki adımınız Package Manager Console'u acın...Ve actıgınız zaman da dikkat edin, konsolun calısacagı proje sizin Context sınıfınızın bulundugu proje olmalıdır...
+
+4 => BLL katmanına geciyoruz...  Entity Framework'u indiriyoruz...DAL ve ENTITIES katmanlarından referans alıyoruz...Sonra SingletonPattern sistemimizi olusturuyoruz...Sonra Generic Repository paternine geciyoruz...
+
+Generic Repository => Gercekleşmesini istedigimiz işlemlerin görevlerini barındıran ve bizim verdigimiz tipte göre işlem yapacak yapıların olusturuldugu bir yapı algoritmasını kuran bir Design Pattern'dir...
+
+BU patternde, hem tekrar kullanılabilirligi arttırmak hem de projenin esnekligini saglamak adına iş akışımızın talep ettigi görevleri uygulayacak metotlar önce Interface'de tanımlanır...Cünkü direkt class'ta bunları tanımlarsak baska bir platform/teknolojiye gectigimizde o platformun/teknolojinin kullandıgı class'lar baska class'lardan miras almıs olabilir ve bizim class'ımızı bu yüzden miras alamayarak metotlarımızı tanımazlar...
+
+Önce Generic Repository'nin Interface'ini acarak baslıyoruz. Sonra BaseRepository'i ve Conc class'larımızı tanımlıyoruz...
+
+5 => UI katmanına geciyoruz...
